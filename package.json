@@ -1,0 +1,8 @@
+{
+  "name": "wh-afteken-concept-app",
+  "packageManager": "yarn@4.3.0",
+  "private": true,
+  "workspaces": [
+    "aftekenen"
+  ]
+}
