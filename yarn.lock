@@ -3056,6 +3056,7 @@ __metadata:
     "@types/react": "npm:~18.2.45"
     "@types/react-test-renderer": "npm:^18.0.7"
     expo: "npm:~51.0.14"
+    expo-camera: "npm:^15.0.11"
     expo-constants: "npm:~16.0.2"
     expo-font: "npm:~12.0.7"
     expo-linking: "npm:~6.3.1"
@@ -4982,6 +4983,17 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10c0/6dea9bd2de2f5219651998cfb93106c69f6cc8296eda7d48760f61029579680bc74f70676a177214ba195dbbd96d00c6c231c4df1cde729e441e22ff5b829a28
+  languageName: node
+  linkType: hard
+
+"expo-camera@npm:^15.0.11":
+  version: 15.0.11
+  resolution: "expo-camera@npm:15.0.11"
+  dependencies:
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/1c759ef688d0c7e05ac7e4185415c15207afa4a7dcbed3bf72a4dcb741fc9fe0ecb002102f2a8c5dd03deddca3cde402faf9ce93b96a56cc53972cd9dd92ef31
   languageName: node
   linkType: hard
 
