@@ -23,15 +23,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="results"
-        options={{
-          title: 'Results',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'albums' : 'albums-outline'} color={color} />
-          ),
-        }}
-      />
     </Tabs>
   );
 }

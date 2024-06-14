@@ -2,7 +2,7 @@
 
 ![](./qrcode.png)
 
-De voorbeeld key zijn:
+De keys die zijn gebruikt voor de voorbeeld zijn:
 ```
 -----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDIYP64g3zIVwMp/ful5rsPkgIA
@@ -29,8 +29,8 @@ rTtH5msMIZRlVZZCcQJAH1kgjA0i0orU8EjhRROCpRgv61OPmU+zaLU/r/hyDidB
 -----END RSA PRIVATE KEY-----
 ```
 
-De QRCode heeft de volgende voorbeeld data, waarvan publickey in base64 is encoded:
 
+De JSON-gecodeerde data van de QRCode, inclusief de base64-gecodeerde public key, is als volgt:
 ```json
 {
     "student": 1234567,

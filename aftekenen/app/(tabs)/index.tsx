@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, View, Text, Button, Alert } from 'react-native';
+import { StyleSheet, View, Text, Button, Alert } from 'react-native';
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import forge from 'node-forge';
