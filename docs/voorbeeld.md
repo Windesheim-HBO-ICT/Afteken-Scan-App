@@ -1,6 +1,6 @@
 # Voorbeeld QRCode
 
-**Docent QR-Code** \
+**Docent QR-Code**
 > Open deze apart als het scannen niet lukt [hier](./docent-qrcode.png).
 
 <img src="./docent-qrcode.png" alt="Docent QR-Code" style="width:400px;"/>
