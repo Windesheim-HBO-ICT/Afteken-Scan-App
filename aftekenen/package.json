@@ -11,7 +11,8 @@
     "test": "jest --watchAll",
     "lint": "expo lint",
     "export:web": "expo export -p web",
-    "serve": "npx serve dist"
+    "serve": "npx serve dist",
+    "serve:https": "npx serve dist --ssl-cert ../server.cert --ssl-key ../server.key"
   },
   "jest": {
     "preset": "jest-expo"
