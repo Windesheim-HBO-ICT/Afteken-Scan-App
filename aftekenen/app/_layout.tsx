@@ -4,11 +4,11 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
-
+import forge from 'node-forge';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import * as SecureStore from 'expo-secure-store';
-import { View, Text } from 'react-native';
-import { Camera, CameraView } from 'expo-camera'; // Import expo-camera
+import { StyleSheet, View, Text, Button, Alert } from 'react-native';
+import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera'; // Import expo-camera
 
 SplashScreen.preventAutoHideAsync();
 
@@ -16,31 +16,96 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded, setLoaded] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [scanned, setScanned] = useState(false);
   const [fontsLoaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  const [permission, requestPermission] = useCameraPermissions();
+
+  const checkAuthentication = async () => {
+    try {
+      const result = await SecureStore.getItemAsync('authentication');
+      if (result !== null) {
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+    } finally {
+      setLoaded(true);
+      SplashScreen.hideAsync();
+    }
+  };
 
   useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        const result = await SecureStore.getItemAsync('authentication');
-        if (result !== null) {
-          setIsLoggedIn(true);
-        }
-      } catch (error) {
-        console.error('Error checking authentication:', error);
-      } finally {
-        setLoaded(true);
-        SplashScreen.hideAsync();
-      }
-    };
+    if (!fontsLoaded || loaded || !permission) {
+      return; // Ensure we only proceed when fonts are loaded, and permission is granted
+    }
 
     checkAuthentication();
-  }, []);
+  }, [fontsLoaded, loaded, permission]);
 
-  if (!fontsLoaded || !loaded) {
+  const handleBarCodeScanned = async ({ type, data }: BarcodeScanningResult) => {
+    setScanned(true);
+    try {
+      const jsonData = JSON.parse(data);
+      const { privatekey } = jsonData;
+
+      // Decode Base64 private key
+      const decodedKey = atob(privatekey);
+
+      // Check if decodedKey is a valid RSA private key
+      const privateKey = forge.pki.privateKeyFromPem(decodedKey);
+      if (!privateKey || !privateKey.n) {
+        throw new Error('Invalid RSA private key');
+      }
+
+      // Save private key securely
+      await SecureStore.setItemAsync('authentication', decodedKey);
+
+      Alert.alert(
+        `Ingelogd`,
+        `U bent ingelogd met uw private key.`,
+        [
+          {
+            text: 'OK',
+            onPress: () => setScanned(false)
+          },
+        ]
+      );
+    } catch (error) {
+      Alert.alert(
+        `Ongeldig`,
+        `Deze QR-code is ongeldig.`,
+        [
+          {
+            text: 'OK', onPress: () => {
+              checkAuthentication()
+              setScanned(false)
+            }
+          }
+        ]
+      );
+      console.error('Error parsing barcode data:', error);
+    }
+  };
+
+  if (!fontsLoaded || !permission || !loaded) {
     return null; // or render a loading indicator
+  }
+
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
   }
 
   return (
@@ -56,7 +121,7 @@ export default function RootLayout() {
           <View style={{ flex: 1 }}>
             <CameraView
               style={{ flex: 1 }}
-              // onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+              onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
               barcodeScannerSettings={{
                 barcodeTypes: ["qr"],
               }} />
@@ -66,3 +131,10 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  }
+});
