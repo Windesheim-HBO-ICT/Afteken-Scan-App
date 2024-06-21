@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, Button, Alert } from 'react-native';
-import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
+import { StyleSheet, View, Text, Button, Alert, Platform } from 'react-native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import forge from 'node-forge';
 
@@ -22,8 +22,17 @@ export default function HomeScreen() {
     );
   }
 
-  const handleBarCodeScanned = async ({ type, data }: BarcodeScanningResult) => {
+  const handleBarCodeScanned = async (result: any) => {
     setScanned(true);
+    let data;
+
+    if (Platform.OS === 'web') {
+      // On web, the result is wrapped in a NativeEvent
+      data = result.nativeEvent.data;
+    } else {
+      data = result.data;
+    }
+
     try {
       const jsonData = JSON.parse(data);
       const convertedData = {
@@ -45,28 +54,65 @@ export default function HomeScreen() {
         md: forge.md.sha256.create(),
       });
 
-      Alert.alert(
-        `Barcode Scanned`,
-        `Data: ${data}\n\nConverted to object it's\n\n${JSON.stringify(convertedData)}\n\n and has the key ${publicKeyPem}.
-        \n\nwhich has encrypted 'This is the test data to be encrypted' to\n\n${encryptedData}`,
-        [
-          { text: 'OK', onPress: () => setScanned(false) }
-        ]
-      );
+      const message = `Data: ${data}\n\nConverted to object it's\n\n${JSON.stringify(convertedData)}\n\n and has the key ${publicKeyPem}.
+      \n\nwhich has encrypted 'This is the test data to be encrypted' to\n\n${encryptedData}`;
+
+      if (Platform.OS === 'web') {
+        window.alert(message);
+        setScanned(false);
+      } else {
+        Alert.alert(
+          `Barcode Scanned`,
+          message,
+          [
+            { text: 'OK', onPress: () => setScanned(false) }
+          ]
+        );
+      }
     } catch (error) {
-      alert('Error parsing barcode data.');
+      let errorMessage = 'Error parsing barcode data.';
+
+      if (error instanceof Error) {
+        errorMessage = `Error parsing barcode data: ${error.message}`;
+      }
+
+      if (Platform.OS === 'web') {
+        window.alert(errorMessage);
+      } else {
+        Alert.alert('Error', errorMessage);
+      }
+
       console.error('Error parsing barcode data:', error);
+      setScanned(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <CameraView
-        style={styles.camera}
-        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ["qr"],
-        }} />
+      {Platform.OS === 'web' ? (
+        // Web platform specific view WITH OLD DEPRECATED PROPS BECAUSE OF EXPO INCOMPETENCE
+        <View style={styles.camera}>
+          <CameraView
+            // @ts-ignore - reason: above comment
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            type="back"
+            barCodeScannerSettings={{
+              barCodeTypes: 'qr',
+            }}
+          />
+        </View>
+      ) : (
+        // Mobile platform specific view
+        <View style={styles.camera}>
+          <CameraView
+            style={{ flex: 1 }} // Adjust styles as needed
+            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+            barcodeScannerSettings={{
+              barcodeTypes: ["qr"],
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 }
