@@ -54,7 +54,13 @@ export default function HomeScreen() {
         ]
       );
     } catch (error) {
-      alert('Error parsing barcode data.');
+      Alert.alert(
+        `Ongeldig`,
+        `Deze QR-code is ongeldig.`,
+        [
+          { text: 'OK', onPress: () => setScanned(false) }
+        ]
+      );
       console.error('Error parsing barcode data:', error);
     }
   };

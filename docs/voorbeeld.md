@@ -1,8 +1,12 @@
 # Voorbeeld QRCode
 
-![](./qrcode.png)
+**Docent QR-Code** \
+![](./docent-qrcode.png)
 
-De keys die zijn gebruikt voor de voorbeeld zijn:
+**Student QR-code** \
+![](./student-qrcode.png)
+
+De keys die zijn gebruikt voor de voorbeeld zijn, deze horen bij elkaar. Let op dat docent en student wel eigen keys krijgen, maar voor de voorbeeld was het makkelijker:
 ```
 -----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDIYP64g3zIVwMp/ful5rsPkgIA
@@ -29,8 +33,14 @@ rTtH5msMIZRlVZZCcQJAH1kgjA0i0orU8EjhRROCpRgv61OPmU+zaLU/r/hyDidB
 -----END RSA PRIVATE KEY-----
 ```
 
+De JSON-gecodeerde data van de docent-QRCode, inclusief de base64-gecodeerde public key, is als volgt:
+```json
+{
+    "privatekey": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDV3dJQkFBS0JnUURJWVA2NGczeklWd01wL2Z1bDVyc1BrZ0lBSWV5S1lGcEJQdFd3bXVkbGJwbkhGTmx6CkZ5WDBVTythdGJsaDlTM3hjcHhqdXhsV01YWkxHTW1qYjRKRCs3NG9nWThWNVVmMGdpbndsdDI2b2JQUFBPNXkKWGFkaUNxSkYzSlFTSTlzbS9CTXQwdnA2SmJlZUM2RWJ3UUQzenlJa29seEUxWVVHNll3elRzSllqd0lEQVFBQgpBb0dBSTdJN3ptMEdIcjU1ZnRLVE1QUFFvUzUya3NWNFdSSmZJYjVxM1FKTGRLTm1XN1BZSlF1YnBGR0N6Y0hQCjI2YU0zN1YyTE1JWSttVG5XT3Q2aUZZR0UzdGd1bGZGNmwxU0xnQnh3Zm5MS1JVS3BhTHY1cE9rek5YdStMRFYKaS8zcFRXbStvd0JGcHBUdDBSb2pva3Ntd0hkWXFFNVBsMEs3c2tDZHpMblhLUGtDUVFEMWltZnFWVzFHVVJ0MgptQ3NkSlFvTXluMm5GNjlaNkF6T1Y0Q3BicmVNekI0NzY5RFZzenRoS1Q5NWFtUVRUc1dBNFY1bWQrZnZEWkJLCk9HNkRBWkdWQWtFQTBPb2E0RHkwR3duT3lxQllBTGxrNkJDMC9Zcnl2UHJtREczaVRTc1VwM25LWTMwRU5VbTUKNWZGSVJhdno1VEZjVm9SUlZ6ek4vbDVFODA2bTlmekFrd0pBUEVsV1NFL2ZPNk9RWmFibzl3ZndGc0hrNWhESApxZ0J5bkhzWmlRQTVLdVczQ3FsVXBoT1NvY0Y1NXpxN0JZNlNxWmtzRDJhaldLdHc0UGhJRWZ4aG5RSkFib3p6ClcrWERpT3RQdW5uUEY5TURTcXBNbkQ2QzVPMy8vbVBIZFA1dkY1Q2pRTEpQSDhPNzA2b3lqR3ZKekdhcWJqM20KclR0SDVtc01JWlJsVlpaQ2NRSkFIMWtnakEwaTBvclU4RWpoUlJPQ3BSZ3Y2MU9QbVUremFMVS9yL2h5RGlkQgo1dWRVY21yc2ZTVDZ5RWIrU2tNcndmcUtkaHU3Y3dwQUxJWHdpei9lNXc9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ=="
+}
+```
 
-De JSON-gecodeerde data van de QRCode, inclusief de base64-gecodeerde public key, is als volgt:
+De JSON-gecodeerde data van de student-QRCode, inclusief de base64-gecodeerde public key, is als volgt:
 ```json
 {
     "student": 1234567,
