@@ -1,10 +1,14 @@
 # Voorbeeld QRCode
 
 **Docent QR-Code** \
-![](./docent-qrcode.png)
+> Open deze apart als het scannen niet lukt [hier](./docent-qrcode.png).
 
-**Student QR-code** \
-![](./student-qrcode.png)
+<img src="./docent-qrcode.png" alt="Docent QR-Code" style="width:400px;"/>
+
+**Student QR-code**  
+> Open deze apart als het scannen niet lukt [hier](./student-qrcode.png).
+
+<img src="./student-qrcode.png" alt="Student QR-code" style="width: 400px;"/>
 
 De keys die zijn gebruikt voor de voorbeeld zijn, deze horen bij elkaar. Let op dat docent en student wel eigen keys krijgen, maar voor de voorbeeld was het makkelijker:
 ```

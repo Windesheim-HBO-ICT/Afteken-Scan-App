@@ -1,7 +1,7 @@
 # WH Aftekenen Concept App
 Dit is een concept Expo React Native app voor Aftekenen binnen HBO-ICT.
 
-Een voorbeeld QR-code is te vinden [hier](./docs/voorbeeld.md).
+Voorbeeld materiaal is te vinden [hier](./docs/voorbeeld.md).
 
 Dit project maakt gebruik van Yarn workspaces. Zorg ervoor dat je eerst alle dependencies installeert door `yarn` uit te voeren in de hoofdmap van het project.
 
