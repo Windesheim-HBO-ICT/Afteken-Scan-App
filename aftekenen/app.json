@@ -22,9 +22,21 @@
       }
     },
     "web": {
+      "output": "server",
       "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "permissions": ["camera"],
+      "favicon": "./assets/favicon.png",
+      "themeColor": "#ffffff",
+      "backgroundColor": "#ffffff",
+      "shortName": "YourApp",
+      "display": "standalone",
+      "scope": "/",
+      "startUrl": "/",
+      "description": "Your app description",
+      "icons": {
+        "192": "./assets/icon-192.png",
+        "512": "./assets/icon-512.png"
+      }
     },
     "plugins": [
       "expo-router",
