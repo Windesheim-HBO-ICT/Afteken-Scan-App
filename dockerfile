@@ -19,8 +19,11 @@ RUN yarn workspace aftekenen install --frozen-lockfile
 # Run expo export command to build the web version
 RUN yarn workspace aftekenen export:web
 
-# Expose the port to connect to
-EXPOSE 3000
+# Copy SSL certificates into the container
+COPY server.cert server.key /app/
 
-# Serve the static files using npx serve
-CMD ["yarn", "workspace", "aftekenen", "serve"]
+# Expose the port to connect to (HTTPS)
+EXPOSE 443
+
+# Serve the static files using npx serve over HTTPS
+CMD ["yarn", "workspace", "aftekenen", "serve:https"]
