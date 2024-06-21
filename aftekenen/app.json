@@ -22,8 +22,6 @@
       }
     },
     "web": {
-      "output": "server",
-      "bundler": "metro",
       "permissions": ["camera"],
       "favicon": "./assets/favicon.png",
       "themeColor": "#ffffff",
