@@ -1,11 +1,11 @@
 import { Database } from "@/logic/database";
 
-type Student = {
+export type Student = {
     studentNumber: string;
     name: string;
 }
 
-type Assignment = {
+export type Assignment = {
     studentNumber: string;
     assignmentId: string;
     done: boolean;

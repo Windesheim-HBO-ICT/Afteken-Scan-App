@@ -1,9 +1,10 @@
 import { StyleSheet, View, Text, Button, Alert, Platform, ScrollView, TextInput, Switch } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useEffect, useState } from 'react';
-import forge from 'node-forge';
 import { Card, Header } from '@rneui/base';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Assignment, Student, StudentDatabase } from '@/types/types';
+import { Database } from '@/logic/database';
 
 type AssignmentFormInputs = {
   studentNumber: string;
@@ -17,6 +18,11 @@ type StudentFormInputs = {
   studentNumber: string;
   studentName: string;
 }
+
+const database: StudentDatabase = new Database({
+  students: [],
+  assignments: []
+})
 
 export default function HomeScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -44,8 +50,44 @@ export default function HomeScreen() {
     formState: { errors: errorsStudent }
   } = useForm<StudentFormInputs>();
 
-  const onSubmitAssignment: SubmitHandler<AssignmentFormInputs> = (data) => console.log(data);
-  const onSubmitStudent: SubmitHandler<StudentFormInputs> = (data) => console.log(data);
+  const onSubmitAssignment: SubmitHandler<AssignmentFormInputs> = (data) => {
+    console.log(data)
+    const student = database.select('students').find(student => student.studentNumber === data.studentNumber)
+    if (!student) {
+      const studentName = prompt('Enter the student name')
+      if (!studentName) {
+        return
+      }
+
+      database.insert('students', { studentNumber: data.studentNumber, name: studentName })
+    } else {
+      // Double check that the student name is correct
+      if (confirm(`Is ${student.name} the correct student?`)) {
+        data.studentNumber = student.studentNumber
+      } else {
+        return
+      }
+    }
+
+    const newAssignment: Assignment = {
+      ...data,
+      done: !!data.done,
+      timestamp: Date.now()
+    }
+
+    database.insert('assignments', newAssignment)
+  };
+
+  const onSubmitStudent: SubmitHandler<StudentFormInputs> = (data) => {
+    console.log(data)
+    
+    const studentData: Student = {
+      studentNumber: data.studentNumber,
+      name: data.studentName,
+    };
+
+    database.insert('students', studentData)
+  };
 
   // Register fields with validation rules
   useEffect(() => {
