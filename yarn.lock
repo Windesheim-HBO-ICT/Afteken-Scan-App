@@ -2624,6 +2624,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rneui/base@npm:^4.0.0-rc.8":
+  version: 4.0.0-rc.8
+  resolution: "@rneui/base@npm:4.0.0-rc.8"
+  dependencies:
+    "@types/react-native-vector-icons": "npm:^6.4.10"
+    color: "npm:^3.2.1"
+    deepmerge: "npm:^4.2.2"
+    hoist-non-react-statics: "npm:^3.3.2"
+    react-native-ratings: "npm:^8.1.0"
+    react-native-size-matters: "npm:^0.4.0"
+  peerDependencies:
+    react-native-safe-area-context: ">= 3.0.0"
+    react-native-vector-icons: ">7.0.0"
+  checksum: 10c0/9b1bcaf98bb93b85c3112aadeef261b50cb8ffcf18f321897d53735a69648eb1b8074cf19fa42b0a821af00b3161e5282f811e8fc66a8f2a1b1fb3ee2e7857d0
+  languageName: node
+  linkType: hard
+
+"@rneui/themed@npm:^4.0.0-rc.8":
+  version: 4.0.0-rc.8
+  resolution: "@rneui/themed@npm:4.0.0-rc.8"
+  peerDependencies:
+    "@rneui/base": 4.0.0-rc.7
+  checksum: 10c0/3842767c96d1bbbfd4e34b8d204aa2f110dda300d85f22a836d584e94daed49c056b674209fd8b2ad600fd9c55967ea08e6976819e1708a7748449dfaa26ebfa
+  languageName: node
+  linkType: hard
+
 "@rnx-kit/chromium-edge-launcher@npm:^1.0.0":
   version: 1.0.0
   resolution: "@rnx-kit/chromium-edge-launcher@npm:1.0.0"
@@ -2854,6 +2880,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-vector-icons@npm:^6.4.10":
+  version: 6.4.18
+  resolution: "@types/react-native-vector-icons@npm:6.4.18"
+  dependencies:
+    "@types/react": "npm:*"
+    "@types/react-native": "npm:^0.70"
+  checksum: 10c0/b27f2295c5baaba9ce2ff9ade6e505e4d1fe4f40a628df13dc26d0e1b3ccee9775846f3613a443d91cfe86844703b81e9e64a10cc4b7fac1edfde96cb82c893b
+  languageName: node
+  linkType: hard
+
+"@types/react-native@npm:^0.70":
+  version: 0.70.19
+  resolution: "@types/react-native@npm:0.70.19"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/09a5191dd0f3b85abfa8939df585860ba11a666d888846c7fd7d8d5d1cd72a39224e154403f90a5b82f1dc6c896fa3447e4f5061b2d3e102d0ce798e559d7f13
+  languageName: node
+  linkType: hard
+
 "@types/react-test-renderer@npm:^18.0.7":
   version: 18.3.0
   resolution: "@types/react-test-renderer@npm:18.3.0"
@@ -3052,6 +3097,8 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^14.0.0"
     "@react-navigation/native": "npm:^6.0.2"
+    "@rneui/base": "npm:^4.0.0-rc.8"
+    "@rneui/themed": "npm:^4.0.0-rc.8"
     "@types/jest": "npm:^29.5.12"
     "@types/node-forge": "npm:^1"
     "@types/react": "npm:~18.2.45"
@@ -3975,7 +4022,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0":
+"color-convert@npm:^1.9.0, color-convert@npm:^1.9.3":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -4007,13 +4054,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-string@npm:^1.9.0":
+"color-string@npm:^1.6.0, color-string@npm:^1.9.0":
   version: 1.9.1
   resolution: "color-string@npm:1.9.1"
   dependencies:
     color-name: "npm:^1.0.0"
     simple-swizzle: "npm:^0.2.2"
   checksum: 10c0/b0bfd74c03b1f837f543898b512f5ea353f71630ccdd0d66f83028d1f0924a7d4272deb278b9aef376cacf1289b522ac3fb175e99895283645a2dc3a33af2404
+  languageName: node
+  linkType: hard
+
+"color@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "color@npm:3.2.1"
+  dependencies:
+    color-convert: "npm:^1.9.3"
+    color-string: "npm:^1.6.0"
+  checksum: 10c0/39345d55825884c32a88b95127d417a2c24681d8b57069413596d9fcbb721459ef9d9ec24ce3e65527b5373ce171b73e38dbcd9c830a52a6487e7f37bf00e83c
   languageName: node
   linkType: hard
 
@@ -5848,7 +5905,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.0":
+"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -7494,7 +7551,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.13, lodash@npm:^4.17.19, lodash@npm:^4.17.21":
+"lodash@npm:^4.17.13, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -9109,6 +9166,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-ratings@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "react-native-ratings@npm:8.1.0"
+  dependencies:
+    lodash: "npm:^4.17.15"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/e1b3d20a92025705cc5a3cc47e04e74c71ba0ab1621398b87334a9d6fa4714a051f0d05f7358e1dab81c3a0c6501f255ac345af17df952c458238e7e6b5de233
+  languageName: node
+  linkType: hard
+
 "react-native-reanimated@npm:~3.10.1":
   version: 3.10.1
   resolution: "react-native-reanimated@npm:3.10.1"
@@ -9149,6 +9218,15 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/899a02751ecbc6231ce3c869268fb510e5b53428c788135ae46f4bbd768efe78bf74f17fec5becc4c4c1e81a5f224a907dc890ba2406181ff9e21830dda95dec
+  languageName: node
+  linkType: hard
+
+"react-native-size-matters@npm:^0.4.0":
+  version: 0.4.2
+  resolution: "react-native-size-matters@npm:0.4.2"
+  peerDependencies:
+    react-native: "*"
+  checksum: 10c0/56715d33d02f10d4ca358761420cc9a971b3872c11b9fa403afd4f0b2bbf74148fd3c4c799959727fb61c576a474e3e1155ffadc247c12d70fadcb562b4a9f29
   languageName: node
   linkType: hard
 

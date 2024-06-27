@@ -1,18 +1,19 @@
-import { StyleSheet, View, Text, Button, Alert, Platform } from 'react-native';
+import { StyleSheet, View, Text, Button, Alert, Platform, ScrollView } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import forge from 'node-forge';
+import { Card, Header } from '@rneui/base';
 
 export default function HomeScreen() {
   const [permission, requestPermission] = useCameraPermissions();
-  const [scanned, setScanned] = useState(false);
+  const [scanned, setScanned] = useState(true);
 
   if (!permission) {
     // Camera permissions are still loading.
     return <View />;
   }
 
-  if (!permission.granted) {
+  if (!permission.granted && !scanned) {
     // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
@@ -89,30 +90,59 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {Platform.OS === 'web' ? (
-        // Web platform specific view WITH OLD DEPRECATED PROPS BECAUSE OF EXPO INCOMPETENCE
-        <View style={styles.camera}>
-          <CameraView
-            // @ts-ignore - reason: above comment
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            type="back"
-            barCodeScannerSettings={{
-              barCodeTypes: 'qr',
-            }}
-          />
-        </View>
-      ) : (
-        // Mobile platform specific view
-        <View style={styles.camera}>
-          <CameraView
-            style={{ flex: 1 }} // Adjust styles as needed
-            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-            barcodeScannerSettings={{
-              barcodeTypes: ["qr"],
-            }}
-          />
-        </View>
-      )}
+      <Header
+        statusBarProps={{ barStyle: 'light-content' }}
+        barStyle="light-content"
+        centerComponent={{ text: 'Aftekenen', style: { fontWeight: "bold" } }}
+        containerStyle={{
+          backgroundColor: '#b1d249',
+          justifyContent: 'space-around',
+        }}
+      />
+      {scanned ?
+        <ScrollView>
+          <View style={styles.container}>
+            <Card>
+              <Card.Title>Assignments</Card.Title>
+              <Card.Divider />
+            </Card>
+            <Card>
+              <Card.Title>Students</Card.Title>
+              <Card.Divider />
+            </Card>
+            <Card>
+              <Button title='Clear Database'></Button>
+            </Card>
+          </View>
+        </ScrollView>
+        :
+        (
+          Platform.OS === 'web' ? (
+            // Web platform specific view WITH OLD DEPRECATED PROPS BECAUSE OF EXPO INCOMPETENCE
+            <View style={styles.camera}>
+              <CameraView
+                // @ts-ignore - reason: above comment
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                type="back"
+                barCodeScannerSettings={{
+                  barCodeTypes: 'qr',
+                }}
+              />
+            </View>
+          ) : (
+            // Mobile platform specific view
+            <View style={styles.camera}>
+              <CameraView
+                style={{ flex: 1 }} // Adjust styles as needed
+                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                barcodeScannerSettings={{
+                  barcodeTypes: ["qr"],
+                }}
+              />
+            </View>
+          )
+        )
+      }
     </View>
   );
 }
