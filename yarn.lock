@@ -3118,9 +3118,12 @@ __metadata:
     expo: "npm:~51.0.14"
     expo-camera: "npm:^15.0.11"
     expo-constants: "npm:~16.0.2"
+    expo-file-system: "npm:^17.0.1"
     expo-font: "npm:~12.0.7"
     expo-linking: "npm:~6.3.1"
+    expo-media-library: "npm:16.0.3"
     expo-router: "npm:~3.5.16"
+    expo-sharing: "npm:^12.0.1"
     expo-splash-screen: "npm:~0.27.5"
     expo-status-bar: "npm:~1.12.1"
     expo-system-ui: "npm:~3.0.6"
@@ -5081,7 +5084,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-file-system@npm:~17.0.1":
+"expo-file-system@npm:^17.0.1, expo-file-system@npm:~17.0.1":
   version: 17.0.1
   resolution: "expo-file-system@npm:17.0.1"
   peerDependencies:
@@ -5117,6 +5120,15 @@ __metadata:
     expo-constants: "npm:~16.0.0"
     invariant: "npm:^2.2.4"
   checksum: 10c0/a6550cacc3117dde92fe9758c3b97089dae8ce2d90a2d6dd4441571991c4c7e139beb9d5648f04eef2fccc52f00f1631f36717bcd070c62413c013a30ae7aa97
+  languageName: node
+  linkType: hard
+
+"expo-media-library@npm:16.0.3":
+  version: 16.0.3
+  resolution: "expo-media-library@npm:16.0.3"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/2a68c84c11e32d23ed876b3ab97285715938624a30eba2675ee8213edbb15ff1f2498a0a6266ae3a5dc70ed6a8dd774b3cdf165ce0770bd2028711955856908b
   languageName: node
   linkType: hard
 
@@ -5174,6 +5186,15 @@ __metadata:
     react-native-reanimated:
       optional: true
   checksum: 10c0/d6aeb3945dff25efa10b1a8c62bc420ca1ccc3a4d2164b2d39a2f73d3be1b9e301bacf4104d37a3a2ee5b1b1e925f5f03402e4fc9131b2b04740685c56396b9c
+  languageName: node
+  linkType: hard
+
+"expo-sharing@npm:^12.0.1":
+  version: 12.0.1
+  resolution: "expo-sharing@npm:12.0.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/9e66755ab3fbed482e700f8a9e0544fbc9abd3bb8e13b60df0d024e97c28c477e18058243410c51f5a39bd04e0775fffc252affa279eb3f3cdcc21aa0321aacf
   languageName: node
   linkType: hard
 

@@ -1,8 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import * as MediaLibrary from 'expo-media-library';
 
 export type IDatabaseSchema = Record<string, object[]>;
-
 interface IDatabase<Schema extends IDatabaseSchema> {
     setup(): Promise<void>;
     insert<T extends keyof Schema>(location: T, item: Schema[T][number]): Promise<void>;
@@ -75,21 +77,35 @@ class Database<Schema extends IDatabaseSchema> implements IDatabase<Schema> {
             throw new Error('No data to export');
         }
 
-        const header = Object.keys(data[0]).join(",");
+        const header = Object.keys(data[0]).join(',');
 
         const csv = [header, ...data.map(data => {
             return Object.values(data).join(',');
-        })].join("\n");
+        })].join('\n');
 
-        if (Platform.OS == "web") {
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'data.csv';
-            a.click();
-        } else {
-            //android and ios
+        try {
+            // Generate filename based on location and current datetime
+            const currentDatetime = new Date().toISOString().slice(0, 19).replace(/[-:]/g, '');
+            const filename = `${String(location)}_${currentDatetime}.csv`;
+
+            // Write CSV data to a file in the app's cache directory
+            const fileUri = FileSystem.documentDirectory + filename;
+            await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: FileSystem.EncodingType.UTF8 });
+
+            // Depending on platform, handle file export
+            if (Platform.OS === 'web') {
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+            } else {
+                await Sharing.shareAsync(fileUri);
+            }
+        } catch (error) {
+            console.error('Error exporting CSV:', error);
+            throw error;
         }
     }
 

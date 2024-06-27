@@ -16,13 +16,19 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "permissions": ["camera"],
+      "permissions": [
+        "camera"
+      ],
       "favicon": "./assets/favicon.png",
       "themeColor": "#ffffff",
       "backgroundColor": "#ffffff",
@@ -38,7 +44,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-camera"
+      "expo-camera",
+      "expo-media-library"
     ],
     "experiments": {
       "typedRoutes": true

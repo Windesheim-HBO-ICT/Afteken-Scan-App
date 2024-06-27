@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Card, Header } from '@rneui/base';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Assignment, Student, database } from '@/types/types';
+import * as MediaLibrary from 'expo-media-library';
 
 type AssignmentFormInputs = {
   studentNumber: string;
@@ -20,6 +21,7 @@ type StudentFormInputs = {
 
 export default function HomeScreen() {
   const [permission, requestPermission] = useCameraPermissions();
+  //const [permissionResponse, requestMediaPermission] = MediaLibrary.usePermissions();
   const [scanned, setScanned] = useState(true);
 
   const {
@@ -126,6 +128,11 @@ export default function HomeScreen() {
     console.log(database);
   };
 
+  const requestPermissions = () => {
+    requestPermission()
+    //requestMediaPermission()
+  }
+
   const onSubmitStudent: SubmitHandler<StudentFormInputs> = async (data) => {
     console.log(data)
 
@@ -156,7 +163,7 @@ export default function HomeScreen() {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Button onPress={requestPermissions} title="grant permission" />
       </View>
     );
   }
@@ -165,12 +172,20 @@ export default function HomeScreen() {
     database.clear()
   }
 
-  const exportAssignments = () => {
-    database.exportToCsv.bind(database, 'assignments');
+  const exportAssignments = async () => {
+    try {
+      await database.exportToCsv('assignments');
+    } catch (error) {
+      console.error('Error exporting assignments:', error);
+    }
   }
 
-  const exportStudents = () => {
-    database.exportToCsv.bind(database, 'students');
+  const exportStudents = async () => {
+    try {
+      await database.exportToCsv('students');
+    } catch (error) {
+      console.error('Error exporting students:', error);
+    }
   }
 
   const toggleScan = async () => {
