@@ -1,9 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
+
 export type IDatabaseSchema = Record<string, object[]>;
 
 interface IDatabase<Schema extends IDatabaseSchema> {
-    setup(): void;
-    insert<T extends keyof Schema>(location: T, item: Schema[T][number]): void;
-    select<T extends keyof Schema>(location: T): Schema[T];
+    setup(): Promise<void>;
+    insert<T extends keyof Schema>(location: T, item: Schema[T][number]): Promise<void>;
+    select<T extends keyof Schema>(location: T): Promise<Schema[T]>;
 }
 
 class Database<Schema extends IDatabaseSchema> implements IDatabase<Schema> {
@@ -16,48 +19,58 @@ class Database<Schema extends IDatabaseSchema> implements IDatabase<Schema> {
         this.setup();
     }
 
-    setup(): void {
-        Object.entries(this.schema).forEach(([key, value]) => {
-            if (!localStorage.getItem(key)) {
-                localStorage.setItem(key, JSON.stringify(value));
-            } else {
-                const data = JSON.parse(localStorage.getItem(key) || '[]');
-                if (!Array.isArray(data)) {
-                    throw new Error('Data must be an array');
+    async setup(): Promise<void> {
+        try {
+            for (const [key, value] of Object.entries(this.schema)) {
+                const storedItem = await AsyncStorage.getItem(key);
+
+                if (!storedItem) {
+                    // If item doesn't exist, store initial data
+                    await AsyncStorage.setItem(key, JSON.stringify(value));
+                } else {
+                    // If item exists, combine with schema data
+                    const data = JSON.parse(storedItem);
+
+                    if (!Array.isArray(data)) {
+                        throw new Error('Data must be an array');
+                    }
+
+                    // Combine the data from the schema and the data from AsyncStorage
+                    const combinedData = [...value, ...data];
+                    await AsyncStorage.setItem(key, JSON.stringify(combinedData));
+
+                    // Clear the schema data
+                    // @ts-ignore - Assuming you know this key exists in schema
+                    this.schema[key] = [];
                 }
-
-                // Combine the data from the schema and the data from localStorage
-                const combinedData = [...value, ...data];
-                localStorage.setItem(key, JSON.stringify(combinedData));
-
-                // Clear the schema data
-                // @ts-ignore - We know that the key exists in the schema
-                this.schema[key] = [];
             }
-        });
+        } catch (error) {
+            console.error('Error in setup:', error);
+            throw error; // Rethrow the error to handle it outside
+        }
     }
 
-    insert<T extends keyof Schema>(location: T, item: Schema[T][number]): void {
+    async insert<T extends keyof Schema>(location: T, item: Schema[T][number]): Promise<void> {
         console.log('insert into:', location, 'The value:', item);
         if (typeof location !== 'string') {
             throw new Error('Location must be a string');
         }
 
-        const data = JSON.parse(localStorage.getItem(location) || '[]');
+        const data = JSON.parse(await AsyncStorage.getItem(location) || '[]');
         data.push(item);
-        localStorage.setItem(location, JSON.stringify(data));
+        await AsyncStorage.setItem(location, JSON.stringify(data))
     }
 
-    select<T extends keyof Schema>(location: T): Schema[T] {
+    async select<T extends keyof Schema>(location: T): Promise<Schema[T]> {
         if (typeof location !== 'string') {
             throw new Error('Location must be a string');
         }
 
-        return JSON.parse(localStorage.getItem(location) || '[]');
+        return JSON.parse(await AsyncStorage.getItem(location) || '[]');
     }
 
-    exportToCsv<T extends keyof Schema>(location: T) {
-        const data = this.select(location);
+    async exportToCsv<T extends keyof Schema>(location: T) {
+        const data = await this.select(location);
         if (!data.length) {
             throw new Error('No data to export');
         }
@@ -68,18 +81,20 @@ class Database<Schema extends IDatabaseSchema> implements IDatabase<Schema> {
             return Object.values(data).join(',');
         })].join("\n");
 
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'data.csv';
-        a.click();
+        if (Platform.OS == "web") {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.csv';
+            a.click();
+        } else {
+            //android and ios
+        }
     }
 
-    clear() {
-        Object.keys(this.schema).forEach(key => {
-            localStorage.setItem(key, JSON.stringify([]));
-        });
+    async clear() {
+        await AsyncStorage.clear()
     }
 }
 

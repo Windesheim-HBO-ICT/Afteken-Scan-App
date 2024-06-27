@@ -50,9 +50,12 @@ export default function HomeScreen() {
     formState: { errors: errorsStudent }
   } = useForm<StudentFormInputs>();
 
-  const onSubmitAssignment: SubmitHandler<AssignmentFormInputs> = (data) => {
+  const onSubmitAssignment: SubmitHandler<AssignmentFormInputs> = async (data) => {
     console.log(data)
-    const student = database.select('students').find(student => student.studentNumber === data.studentNumber)
+
+    const students = await database.select('students');
+    const student = students.find(student => student.studentNumber === data.studentNumber);
+
     if (!student) {
       const studentName = prompt('Enter the student name')
       if (!studentName) {
@@ -76,17 +79,19 @@ export default function HomeScreen() {
     }
 
     database.insert('assignments', newAssignment)
+    console.log(database)
   };
 
-  const onSubmitStudent: SubmitHandler<StudentFormInputs> = (data) => {
+  const onSubmitStudent: SubmitHandler<StudentFormInputs> = async (data) => {
     console.log(data)
-    
+
     const studentData: Student = {
       studentNumber: data.studentNumber,
       name: data.studentName,
     };
 
     database.insert('students', studentData)
+    console.log(database)
   };
 
   // Register fields with validation rules
@@ -112,6 +117,18 @@ export default function HomeScreen() {
     );
   }
 
+  const clearDatabase = () => {
+    database.clear()
+  }
+
+  const exportAssignments = () => {
+    database.exportToCsv.bind(database, 'assignments');
+  }
+
+  const exportStudents = () => {
+    database.exportToCsv.bind(database, 'students');
+  }
+
   const toggleScan = async () => {
     setScanned(!scanned)
   }
@@ -131,7 +148,7 @@ export default function HomeScreen() {
       const jsonData = JSON.parse(data);
       const convertedData = {
         student: jsonData.student,
-        assignment: jsonData.opdracht,
+        assignment: jsonData.assignment,
         rubric: jsonData.rubric
       };
 
@@ -229,12 +246,12 @@ export default function HomeScreen() {
               <Button title="Submit" onPress={handleSubmitStudent(onSubmitStudent)} />
             </Card>
             <Card>
-              <Button title='Export Assignments'></Button>
+              <Button title='Export Assignments' onPress={exportAssignments}></Button>
               <Card.Divider />
-              <Button title='Export Studens'></Button>
+              <Button title='Export Students' onPress={exportStudents}></Button>
               <Card.Divider />
               <Card.Divider />
-              <Button title='Clear Database'></Button>
+              <Button title='Clear Database' onPress={clearDatabase}></Button>
             </Card>
           </View>
         </ScrollView>
