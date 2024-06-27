@@ -3,8 +3,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useEffect, useState } from 'react';
 import { Card, Header } from '@rneui/base';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Assignment, Student, StudentDatabase, database } from '@/types/types';
-import { Database } from '@/logic/database';
+import { Assignment, Student, database } from '@/types/types';
 
 type AssignmentFormInputs = {
   studentNumber: string;

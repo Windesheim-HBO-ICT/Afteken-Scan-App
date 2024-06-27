@@ -1,12 +1,27 @@
-import { StyleSheet, View, Text, Button, Alert, Platform, ScrollView, TextInput, Switch } from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useEffect, useState } from 'react';
+import { Text, StyleSheet, View, Button, ScrollView, FlatList } from 'react-native';
 import { Card, Header } from '@rneui/base';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { Assignment, Student, StudentDatabase, database } from '@/types/types';
-import { Database } from '@/logic/database';
+import { Assignment, Student, database } from '@/types/types';
+import { useEffect, useState } from 'react';
 
 export default function InfoScreen() {
+  const [students, setStudents] = useState<Student[]>([]);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const studentsDB = await database.select('students');
+        const assignmentsDB = await database.select('assignments');
+        setStudents(studentsDB);
+        setAssignments(assignmentsDB);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [database])
+
   const clearDatabase = () => {
     database.clear()
   }
@@ -18,6 +33,18 @@ export default function InfoScreen() {
   const exportStudents = () => {
     database.exportToCsv.bind(database, 'students');
   }
+
+  const renderAssignmentItem = ({ item }: { item: Assignment }) => (
+    <View>
+      <Text>{item.assignmentId}</Text>
+    </View>
+  );
+
+  const renderStudentItem = ({ item }: { item: Student }) => (
+    <View>
+      <Text>{item.name}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -35,12 +62,22 @@ export default function InfoScreen() {
           <Card>
             <Card.Title>Assignments</Card.Title>
             <Card.Divider />
+            <FlatList
+              data={assignments}
+              renderItem={renderAssignmentItem}
+              keyExtractor={(item) => item.assignmentId}
+            />
             <View>
             </View>
           </Card>
           <Card>
             <Card.Title>Students</Card.Title>
             <Card.Divider />
+            <FlatList
+              data={students}
+              renderItem={renderStudentItem}
+              keyExtractor={(item) => item.studentNumber}
+            />
           </Card>
           <Card>
             <Button title='Export Assignments' onPress={exportAssignments}></Button>
