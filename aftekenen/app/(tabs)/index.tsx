@@ -3,7 +3,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useEffect, useState } from 'react';
 import { Card, Header } from '@rneui/base';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Assignment, Student, StudentDatabase } from '@/types/types';
+import { Assignment, Student, StudentDatabase, database } from '@/types/types';
 import { Database } from '@/logic/database';
 
 type AssignmentFormInputs = {
@@ -18,11 +18,6 @@ type StudentFormInputs = {
   studentNumber: string;
   studentName: string;
 }
-
-const database: StudentDatabase = new Database({
-  students: [],
-  assignments: []
-})
 
 export default function HomeScreen() {
   const [permission, requestPermission] = useCameraPermissions();

@@ -20,7 +20,7 @@ type StudentSchema = {
 
 export type StudentDatabase = Database<StudentSchema>
 
-const database: StudentDatabase = new Database({
+export const database: StudentDatabase = new Database({
     students: [],
     assignments: []
 })
