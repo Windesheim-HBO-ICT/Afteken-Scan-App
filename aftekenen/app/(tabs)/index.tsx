@@ -1,12 +1,59 @@
-import { StyleSheet, View, Text, Button, Alert, Platform, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Button, Alert, Platform, ScrollView, TextInput, Switch } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import forge from 'node-forge';
 import { Card, Header } from '@rneui/base';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+type AssignmentFormInputs = {
+  studentNumber: string;
+  assignmentId: string;
+  done: boolean;
+  notes: string;
+  timestamp: string;
+}
+
+type StudentFormInputs = {
+  studentNumber: string;
+  studentName: string;
+}
 
 export default function HomeScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(true);
+
+  const {
+    register: registerAssignment,
+    handleSubmit: handleSubmitAssignment,
+    setValue: setValueAssignment,
+    watch: watchAssignment,
+    formState: { errors: errorsAssignment }
+  } = useForm<AssignmentFormInputs>({
+    defaultValues: {
+      done: false,
+      notes: '',
+      timestamp: '',
+    },
+  });
+
+  const {
+    register: registerStudent,
+    handleSubmit: handleSubmitStudent,
+    setValue: setValueStudent,
+    watch: watchStudent,
+    formState: { errors: errorsStudent }
+  } = useForm<StudentFormInputs>();
+
+  const onSubmitAssignment: SubmitHandler<AssignmentFormInputs> = (data) => console.log(data);
+  const onSubmitStudent: SubmitHandler<StudentFormInputs> = (data) => console.log(data);
+
+  // Register fields with validation rules
+  useEffect(() => {
+    registerAssignment('studentNumber', { required: true });
+    registerAssignment('assignmentId', { required: true });
+    registerStudent('studentNumber', { required: true });
+    registerStudent('studentName', { required: true });
+  }, [registerAssignment, registerStudent]);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -21,6 +68,10 @@ export default function HomeScreen() {
         <Button onPress={requestPermission} title="grant permission" />
       </View>
     );
+  }
+
+  const toggleScan = async () => {
+    setScanned(!scanned)
   }
 
   const handleBarCodeScanned = async (result: any) => {
@@ -38,38 +89,12 @@ export default function HomeScreen() {
       const jsonData = JSON.parse(data);
       const convertedData = {
         student: jsonData.student,
-        publickey: jsonData.publickey,
-        opdracht: jsonData.opdracht
+        assignment: jsonData.opdracht,
+        rubric: jsonData.rubric
       };
 
-      const publicKeyPem = atob(convertedData.publickey);
-
-      // Convert PEM formatted public key to a Forge public key object
-      const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
-
-      // Define your test data
-      const testData = 'This is the test data to be encrypted';
-
-      // Encrypt the test data using the public key
-      const encryptedData = publicKey.encrypt(testData, 'RSA-OAEP', {
-        md: forge.md.sha256.create(),
-      });
-
-      const message = `Data: ${data}\n\nConverted to object it's\n\n${JSON.stringify(convertedData)}\n\n and has the key ${publicKeyPem}.
-      \n\nwhich has encrypted 'This is the test data to be encrypted' to\n\n${encryptedData}`;
-
-      if (Platform.OS === 'web') {
-        window.alert(message);
-        setScanned(false);
-      } else {
-        Alert.alert(
-          `Barcode Scanned`,
-          message,
-          [
-            { text: 'OK', onPress: () => setScanned(false) }
-          ]
-        );
-      }
+      setValueAssignment("studentNumber", convertedData.student)
+      setValueAssignment("assignmentId", convertedData.assignment)
     } catch (error) {
       let errorMessage = 'Error parsing barcode data.';
 
@@ -84,7 +109,6 @@ export default function HomeScreen() {
       }
 
       console.error('Error parsing barcode data:', error);
-      setScanned(false);
     }
   };
 
@@ -105,12 +129,69 @@ export default function HomeScreen() {
             <Card>
               <Card.Title>Assignments</Card.Title>
               <Card.Divider />
+              <View>
+                <TextInput
+                  placeholder="Student Number"
+                  onChangeText={(text) => setValueAssignment('studentNumber', text)}
+                  style={styles.input}
+                  value={watchAssignment('studentNumber')}
+                />
+                {errorsAssignment.studentNumber && <Text style={styles.errorText}>This field is required</Text>}
+
+                <TextInput
+                  placeholder="Assignment ID"
+                  onChangeText={(text) => setValueAssignment('assignmentId', text)}
+                  style={styles.input}
+                  value={watchAssignment('assignmentId')}
+                />
+                {errorsAssignment.assignmentId && <Text style={styles.errorText}>This field is required</Text>}
+
+                <View style={styles.switchContainer}>
+                  <Text>Done</Text>
+                  <Switch
+                    onValueChange={(value) => setValueAssignment('done', value)}
+                    value={watchAssignment('done')}
+                  />
+                </View>
+
+                <TextInput
+                  placeholder="Notes"
+                  onChangeText={(text) => setValueAssignment('notes', text)}
+                  style={styles.input}
+                />
+
+                <Button title="Scan QR" onPress={toggleScan} />
+                <Card.Divider />
+                <Button title="Submit" onPress={handleSubmitAssignment(onSubmitAssignment)} />
+              </View>
             </Card>
             <Card>
               <Card.Title>Students</Card.Title>
               <Card.Divider />
+              <TextInput
+                placeholder="Student Number"
+                onChangeText={(text) => setValueStudent('studentNumber', text)}
+                style={styles.input}
+                value={watchStudent('studentNumber')}
+              />
+              {errorsStudent.studentNumber && <Text style={styles.errorText}>This field is required</Text>}
+
+              <TextInput
+                placeholder="Student Name"
+                onChangeText={(text) => setValueStudent('studentName', text)}
+                style={styles.input}
+                value={watchStudent('studentName')}
+              />
+              {errorsStudent.studentName && <Text style={styles.errorText}>This field is required</Text>}
+
+              <Button title="Submit" onPress={handleSubmitStudent(onSubmitStudent)} />
             </Card>
             <Card>
+              <Button title='Export Assignments'></Button>
+              <Card.Divider />
+              <Button title='Export Studens'></Button>
+              <Card.Divider />
+              <Card.Divider />
               <Button title='Clear Database'></Button>
             </Card>
           </View>
@@ -128,6 +209,7 @@ export default function HomeScreen() {
                   barCodeTypes: 'qr',
                 }}
               />
+              <Button title="Return" onPress={toggleScan} />
             </View>
           ) : (
             // Mobile platform specific view
@@ -139,6 +221,7 @@ export default function HomeScreen() {
                   barcodeTypes: ["qr"],
                 }}
               />
+              <Button title="Return" onPress={toggleScan} />
             </View>
           )
         )
@@ -170,5 +253,21 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    padding: 8,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
   },
 });
