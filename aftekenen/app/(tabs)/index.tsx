@@ -45,35 +45,85 @@ export default function HomeScreen() {
   } = useForm<StudentFormInputs>();
 
   const onSubmitAssignment: SubmitHandler<AssignmentFormInputs> = async (data) => {
-    console.log(data)
+    console.log(data);
 
     const students = await database.select('students');
     const student = students.find(student => student.studentNumber === data.studentNumber);
 
-    if (!student) {
-      const studentName = prompt('Enter the student name')
-      if (!studentName) {
-        return
-      }
-
-      database.insert('students', { studentNumber: data.studentNumber, name: studentName })
-    } else {
-      // Double check that the student name is correct
-      if (confirm(`Is ${student.name} the correct student?`)) {
-        data.studentNumber = student.studentNumber
+    const getStudentName = async () => {
+      if (Platform.OS === 'web') {
+        return prompt('Enter the student name');
+      } else if (Platform.OS == "ios") {
+        return new Promise<string | undefined>((resolve) => {
+          Alert.prompt('Enter the student name', undefined, [
+            {
+              text: 'Cancel',
+              onPress: () => resolve(undefined),
+              style: 'cancel',
+            },
+            {
+              text: 'Submit',
+              onPress: (name) => resolve(name),
+            },
+          ]);
+        });
       } else {
-        return
+        //TODO: android needs custom implementation
       }
+    };
+
+    const confirmStudent = async (name: string) => {
+      if (Platform.OS === 'web') {
+        return confirm(`Is ${name} the correct student?`);
+      } else {
+        return new Promise<boolean>((resolve) => {
+          Alert.alert(
+            'Confirm Student',
+            `Is ${name} the correct student?`,
+            [
+              {
+                text: 'No',
+                onPress: () => resolve(false),
+                style: 'cancel',
+              },
+              {
+                text: 'Yes',
+                onPress: () => resolve(true),
+              },
+            ],
+            { cancelable: false }
+          );
+        });
+      }
+    };
+
+    let studentName = '';
+    if (!student) {
+      studentName = await getStudentName() ?? '';
+      if (!studentName) {
+        return;
+      }
+      // Insert new student into database
+      database.insert('students', { studentNumber: data.studentNumber, name: studentName });
+    } else {
+      const isConfirmed = await confirmStudent(student.name);
+      if (!isConfirmed) {
+        return;
+      }
+      // Use existing student data
+      data.studentNumber = student.studentNumber;
     }
 
+    // Create new assignment
     const newAssignment: Assignment = {
       ...data,
       done: !!data.done,
-      timestamp: Date.now()
-    }
+      timestamp: Date.now(),
+    };
 
-    database.insert('assignments', newAssignment)
-    console.log(database)
+    // Insert new assignment into database
+    database.insert('assignments', newAssignment);
+    console.log(database);
   };
 
   const onSubmitStudent: SubmitHandler<StudentFormInputs> = async (data) => {

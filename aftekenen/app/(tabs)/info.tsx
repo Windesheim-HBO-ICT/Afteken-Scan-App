@@ -35,14 +35,17 @@ export default function InfoScreen() {
   }
 
   const renderAssignmentItem = ({ item }: { item: Assignment }) => (
-    <View>
+    <View style={styles.item}>
       <Text>{item.assignmentId}</Text>
+      <Text>Done: {item.done ? 'Yes' : 'No'}</Text>
+      <Text>Notes: {item.notes}</Text>
     </View>
   );
 
   const renderStudentItem = ({ item }: { item: Student }) => (
-    <View>
+    <View style={styles.item}>
       <Text>{item.name}</Text>
+      <Text>Student Number: {item.studentNumber}</Text>
     </View>
   );
 
@@ -63,6 +66,7 @@ export default function InfoScreen() {
             <Card.Title>Assignments</Card.Title>
             <Card.Divider />
             <FlatList
+              scrollEnabled={false}
               data={assignments}
               renderItem={renderAssignmentItem}
               keyExtractor={(item) => item.assignmentId}
@@ -74,6 +78,7 @@ export default function InfoScreen() {
             <Card.Title>Students</Card.Title>
             <Card.Divider />
             <FlatList
+              scrollEnabled={false}
               data={students}
               renderItem={renderStudentItem}
               keyExtractor={(item) => item.studentNumber}
@@ -98,9 +103,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  camera: {
-    flex: 1,
-  },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -112,25 +114,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    padding: 8,
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 12,
+  item: {
+    backgroundColor: '#d3d3d3',
+    padding: 20,
+    marginVertical: 8,
   },
 });
