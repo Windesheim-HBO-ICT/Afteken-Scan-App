@@ -35,4 +35,4 @@ Om een script uit te voeren, gebruik `yarn workspace aftekenen <script>`.
 | `export:web`    | Exporteert het project voor web met Expo.                 |
 | `serve`         | Serveert de `dist` map met HTTP.                          |
 | `serve:https`   | Serveert de `dist` map met HTTPS.                         |
-| `export-serve`  | Voert 'yarn export:web' uit en serveert daarna met HTTPS. |
+| `export-serve`  | Voert `yarn export:web` uit en serveert daarna met HTTPS. |
