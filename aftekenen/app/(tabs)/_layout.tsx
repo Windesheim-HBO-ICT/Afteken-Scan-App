@@ -23,6 +23,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="info"
+        options={{
+          title: 'Info',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'folder' : 'folder-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

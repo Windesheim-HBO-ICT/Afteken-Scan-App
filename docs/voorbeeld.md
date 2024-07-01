@@ -1,54 +1,14 @@
 # Voorbeeld QRCode
 
-**Docent QR-Code**
-> Open deze apart als het scannen niet lukt [hier](./docent-qrcode.png).
-
-<img src="./docent-qrcode.png" alt="Docent QR-Code" style="width:400px;"/>
-
-**Student QR-code**  
 > Open deze apart als het scannen niet lukt [hier](./student-qrcode.png).
+![](./student-qrcode.png)
 
-<img src="./student-qrcode.png" alt="Student QR-code" style="width: 400px;"/>
 
-De keys die zijn gebruikt voor de voorbeeld zijn, deze horen bij elkaar. Let op dat docent en student wel eigen keys krijgen, maar voor de voorbeeld was het makkelijker:
-```
------BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDIYP64g3zIVwMp/ful5rsPkgIA
-IeyKYFpBPtWwmudlbpnHFNlzFyX0UO+atblh9S3xcpxjuxlWMXZLGMmjb4JD+74o
-gY8V5Uf0ginwlt26obPPPO5yXadiCqJF3JQSI9sm/BMt0vp6JbeeC6EbwQD3zyIk
-olxE1YUG6YwzTsJYjwIDAQAB
------END PUBLIC KEY-----
-```
-```
------BEGIN RSA PRIVATE KEY-----
-MIICWwIBAAKBgQDIYP64g3zIVwMp/ful5rsPkgIAIeyKYFpBPtWwmudlbpnHFNlz
-FyX0UO+atblh9S3xcpxjuxlWMXZLGMmjb4JD+74ogY8V5Uf0ginwlt26obPPPO5y
-XadiCqJF3JQSI9sm/BMt0vp6JbeeC6EbwQD3zyIkolxE1YUG6YwzTsJYjwIDAQAB
-AoGAI7I7zm0GHr55ftKTMPPQoS52ksV4WRJfIb5q3QJLdKNmW7PYJQubpFGCzcHP
-26aM37V2LMIY+mTnWOt6iFYGE3tgulfF6l1SLgBxwfnLKRUKpaLv5pOkzNXu+LDV
-i/3pTWm+owBFppTt0RojoksmwHdYqE5Pl0K7skCdzLnXKPkCQQD1imfqVW1GURt2
-mCsdJQoMyn2nF69Z6AzOV4CpbreMzB4769DVszthKT95amQTTsWA4V5md+fvDZBK
-OG6DAZGVAkEA0Ooa4Dy0GwnOyqBYALlk6BC0/YryvPrmDG3iTSsUp3nKY30ENUm5
-5fFIRavz5TFcVoRRVzzN/l5E806m9fzAkwJAPElWSE/fO6OQZabo9wfwFsHk5hDH
-qgBynHsZiQA5KuW3CqlUphOSocF55zq7BY6SqZksD2ajWKtw4PhIEfxhnQJAbozz
-W+XDiOtPunnPF9MDSqpMnD6C5O3//mPHdP5vF5CjQLJPH8O706oyjGvJzGaqbj3m
-rTtH5msMIZRlVZZCcQJAH1kgjA0i0orU8EjhRROCpRgv61OPmU+zaLU/r/hyDidB
-5udUcmrsfST6yEb+SkMrwfqKdhu7cwpALIXwiz/e5w==
------END RSA PRIVATE KEY-----
-```
-
-De JSON-gecodeerde data van de docent-QRCode, inclusief de base64-gecodeerde public key, is als volgt:
+De JSON-gecodeerde data van de QRCode, inclusief de base64-gecodeerde public key, is als volgt:
 ```json
 {
-    "privatekey": "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDV3dJQkFBS0JnUURJWVA2NGczeklWd01wL2Z1bDVyc1BrZ0lBSWV5S1lGcEJQdFd3bXVkbGJwbkhGTmx6CkZ5WDBVTythdGJsaDlTM3hjcHhqdXhsV01YWkxHTW1qYjRKRCs3NG9nWThWNVVmMGdpbndsdDI2b2JQUFBPNXkKWGFkaUNxSkYzSlFTSTlzbS9CTXQwdnA2SmJlZUM2RWJ3UUQzenlJa29seEUxWVVHNll3elRzSllqd0lEQVFBQgpBb0dBSTdJN3ptMEdIcjU1ZnRLVE1QUFFvUzUya3NWNFdSSmZJYjVxM1FKTGRLTm1XN1BZSlF1YnBGR0N6Y0hQCjI2YU0zN1YyTE1JWSttVG5XT3Q2aUZZR0UzdGd1bGZGNmwxU0xnQnh3Zm5MS1JVS3BhTHY1cE9rek5YdStMRFYKaS8zcFRXbStvd0JGcHBUdDBSb2pva3Ntd0hkWXFFNVBsMEs3c2tDZHpMblhLUGtDUVFEMWltZnFWVzFHVVJ0MgptQ3NkSlFvTXluMm5GNjlaNkF6T1Y0Q3BicmVNekI0NzY5RFZzenRoS1Q5NWFtUVRUc1dBNFY1bWQrZnZEWkJLCk9HNkRBWkdWQWtFQTBPb2E0RHkwR3duT3lxQllBTGxrNkJDMC9Zcnl2UHJtREczaVRTc1VwM25LWTMwRU5VbTUKNWZGSVJhdno1VEZjVm9SUlZ6ek4vbDVFODA2bTlmekFrd0pBUEVsV1NFL2ZPNk9RWmFibzl3ZndGc0hrNWhESApxZ0J5bkhzWmlRQTVLdVczQ3FsVXBoT1NvY0Y1NXpxN0JZNlNxWmtzRDJhaldLdHc0UGhJRWZ4aG5RSkFib3p6ClcrWERpT3RQdW5uUEY5TURTcXBNbkQ2QzVPMy8vbVBIZFA1dkY1Q2pRTEpQSDhPNzA2b3lqR3ZKekdhcWJqM20KclR0SDVtc01JWlJsVlpaQ2NRSkFIMWtnakEwaTBvclU4RWpoUlJPQ3BSZ3Y2MU9QbVUremFMVS9yL2h5RGlkQgo1dWRVY21yc2ZTVDZ5RWIrU2tNcndmcUtkaHU3Y3dwQUxJWHdpei9lNXc9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ=="
-}
-```
-
-De JSON-gecodeerde data van de student-QRCode, inclusief de base64-gecodeerde public key, is als volgt:
-```json
-{
-    "student": 1234567,
-    "publickey": "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FESVlQNjRnM3pJVndNcC9mdWw1cnNQa2dJQQpJZXlLWUZwQlB0V3dtdWRsYnBuSEZObHpGeVgwVU8rYXRibGg5UzN4Y3B4anV4bFdNWFpMR01tamI0SkQrNzRvCmdZOFY1VWYwZ2lud2x0MjZvYlBQUE81eVhhZGlDcUpGM0pRU0k5c20vQk10MHZwNkpiZWVDNkVid1FEM3p5SWsKb2x4RTFZVUc2WXd6VHNKWWp3SURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ==",
-    "opdracht": "OPD12345"
+    "student": "s1234567",
+    "assignment": "OPD12345",
+    "rubric": "REQ1"
 }
 ```
