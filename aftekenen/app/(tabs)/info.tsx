@@ -1,29 +1,33 @@
 import { Text, StyleSheet, View, Button, ScrollView, FlatList } from 'react-native';
 import { Card, Header } from '@rneui/base';
 import { Assignment, Student, database } from '@/types/types';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 
 export default function InfoScreen() {
   const [students, setStudents] = useState<Student[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const studentsDB = await database.select('students');
-        const assignmentsDB = await database.select('assignments');
-        setStudents(studentsDB);
-        setAssignments(assignmentsDB);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const studentsDB = await database.select('students');
+      const assignmentsDB = await database.select('assignments');
+      setStudents(studentsDB);
+      setAssignments(assignmentsDB);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-    fetchData();
-  }, [database])
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   const clearDatabase = () => {
     database.clear()
+    fetchData();
   }
 
   const exportAssignments = () => {
