@@ -1,5 +1,5 @@
-import { Text, StyleSheet, View, Button, ScrollView, FlatList } from 'react-native';
-import { Card, CheckBox, Header } from '@rneui/base';
+import { Text, StyleSheet, View, ScrollView, FlatList } from 'react-native';
+import { Button, Card, CheckBox, Header } from '@rneui/base';
 import { Assignment, Student, database } from '@/types/types';
 import { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
@@ -102,12 +102,34 @@ export default function InfoScreen() {
             />
           </Card>
           <Card>
-            <Button title='Export Assignments' onPress={exportAssignments}></Button>
+            <Button
+              title=" Export Assignments"
+              onPress={exportAssignments}
+              icon={<Ionicons name="document-text-outline" size={18} color="white" />}
+              buttonStyle={{ backgroundColor: '#2196F3', marginBottom: 10 }}
+              titleStyle={{ fontSize: 16 }}
+            />
+
             <Card.Divider />
-            <Button title='Export Students' onPress={exportStudents}></Button>
+
+            <Button
+              title=" Export Students"
+              onPress={exportStudents}
+              icon={<Ionicons name="people-outline" size={18} color="white" />}
+              buttonStyle={{ backgroundColor: '#FF9800', marginBottom: 10 }}
+              titleStyle={{ fontSize: 16 }}
+            />
+
             <Card.Divider />
             <Card.Divider />
-            <Button title='Clear Database' onPress={clearDatabase}></Button>
+
+            <Button
+              title=" Clear Database"
+              onPress={clearDatabase}
+              icon={<Ionicons name="trash-outline" size={18} color="white" />}
+              buttonStyle={{ backgroundColor: '#F44336' }}
+              titleStyle={{ fontSize: 16 }}
+            />
           </Card>
         </View>
       </ScrollView>
