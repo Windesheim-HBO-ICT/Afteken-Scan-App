@@ -1,6 +1,6 @@
 # Voorbeeld QRCode
 
-> Open deze apart als het scannen niet lukt [hier](./student-qrcode.png).
+> Open deze apart als het scannen niet lukt [hier](./student-qrcode.png). \
 ![](./student-qrcode.png)
 
 
