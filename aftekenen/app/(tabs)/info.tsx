@@ -31,12 +31,20 @@ export default function InfoScreen() {
     fetchData();
   }
 
-  const exportAssignments = () => {
-    database.exportToCsv.bind(database, 'assignments');
+  const exportAssignments = async () => {
+    try {
+      await database.exportToCsv('assignments');
+    } catch (error) {
+      console.error('Error exporting assignments:', error);
+    }
   }
 
-  const exportStudents = () => {
-    database.exportToCsv.bind(database, 'students');
+  const exportStudents = async () => {
+    try {
+      await database.exportToCsv('students');
+    } catch (error) {
+      console.error('Error exporting students:', error);
+    }
   }
 
   const renderAssignmentItem = ({ item }: { item: Assignment }) => (
