@@ -23,6 +23,7 @@
     "@react-navigation/native": "^6.0.2",
     "@rneui/base": "^4.0.0-rc.8",
     "@rneui/themed": "^4.0.0-rc.8",
+    "date-fns": "^3.6.0",
     "expo": "~51.0.14",
     "expo-camera": "^15.0.11",
     "expo-constants": "~16.0.2",

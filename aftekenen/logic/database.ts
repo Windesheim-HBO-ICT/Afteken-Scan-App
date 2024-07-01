@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
+import { format } from 'date-fns';
 
 export type IDatabaseSchema = Record<string, object[]>;
 interface IDatabase<Schema extends IDatabaseSchema> {
@@ -85,7 +86,7 @@ class Database<Schema extends IDatabaseSchema> implements IDatabase<Schema> {
 
         try {
             // Generate filename based on location and current datetime
-            const currentDatetime = new Date().toISOString().slice(0, 19).replace(/[-:]/g, '');
+            const currentDatetime = format(new Date(), 'yyyyMMdd_HHmmss');
             const filename = `${String(location)}_${currentDatetime}.csv`;
 
             // Depending on platform, handle file export
