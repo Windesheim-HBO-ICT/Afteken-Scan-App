@@ -88,10 +88,6 @@ class Database<Schema extends IDatabaseSchema> implements IDatabase<Schema> {
             const currentDatetime = new Date().toISOString().slice(0, 19).replace(/[-:]/g, '');
             const filename = `${String(location)}_${currentDatetime}.csv`;
 
-            // Write CSV data to a file in the app's cache directory
-            const fileUri = FileSystem.documentDirectory + filename;
-            await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: FileSystem.EncodingType.UTF8 });
-
             // Depending on platform, handle file export
             if (Platform.OS === 'web') {
                 const blob = new Blob([csv], { type: 'text/csv' });
@@ -101,6 +97,10 @@ class Database<Schema extends IDatabaseSchema> implements IDatabase<Schema> {
                 a.download = filename;
                 a.click();
             } else {
+                // Write CSV data to a file in the app's cache directory
+                const fileUri = FileSystem.documentDirectory + filename;
+                await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: FileSystem.EncodingType.UTF8 });
+
                 await Sharing.shareAsync(fileUri);
             }
         } catch (error) {
