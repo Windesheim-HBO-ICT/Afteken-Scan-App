@@ -1,8 +1,9 @@
 import { Text, StyleSheet, View, Button, ScrollView, FlatList } from 'react-native';
-import { Card, Header } from '@rneui/base';
+import { Card, CheckBox, Header } from '@rneui/base';
 import { Assignment, Student, database } from '@/types/types';
 import { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function InfoScreen() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -40,16 +41,20 @@ export default function InfoScreen() {
 
   const renderAssignmentItem = ({ item }: { item: Assignment }) => (
     <View style={styles.item}>
-      <Text>{item.assignmentId}</Text>
-      <Text>Done: {item.done ? 'Yes' : 'No'}</Text>
-      <Text>Notes: {item.notes}</Text>
+      <Text style={styles.header}>Assignment ID: {item.assignmentId}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Ionicons name={item.done ? 'checkmark-circle' : 'close-circle'} size={20} color={item.done ? 'green' : 'red'} style={{ marginRight: 5 }} />
+        <Text style={styles.label}>Done: {item.done ? 'Yes' : 'No'}</Text>
+      </View>
+      <Text style={styles.label}>Student: {item.studentNumber}</Text>
+      <Text style={styles.label}>Notes: {item.notes}</Text>
     </View>
   );
 
   const renderStudentItem = ({ item }: { item: Student }) => (
     <View style={styles.item}>
-      <Text>{item.name}</Text>
-      <Text>Student Number: {item.studentNumber}</Text>
+      <Text style={styles.header}>Student Name: {item.name}</Text>
+      <Text style={styles.label}>Student Number: {item.studentNumber}</Text>
     </View>
   );
 
@@ -119,8 +124,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   item: {
-    backgroundColor: '#d3d3d3',
-    padding: 20,
-    marginVertical: 8,
+    padding: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
+  header: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 3,
   },
 });
