@@ -6,7 +6,7 @@ Een voorbeeld QR-code is te vinden [hier](./docs/voorbeeld.md).
 Dit project maakt gebruik van Yarn workspaces. Zorg ervoor dat je eerst alle dependencies installeert door `yarn` uit te voeren in de hoofdmap van het project.
 
 ## SSL
-Om de PWA-versie (web) te testen en de camera te laten werken, zijn SSL-certificaten vereist. Installeer openssl en voer vervolgens het volgende commando uit:
+Om de PWA-versie (web) te testen en de camera te laten werken, zijn SSL-certificaten vereist. Installeer [OpenSSL](https://www.openssl.org/) en voer vervolgens het volgende commando uit:
 
 ```bash
 openssl req -nodes -new -x509 -keyout server.key -out server.cert -subj "/CN=localhost"
