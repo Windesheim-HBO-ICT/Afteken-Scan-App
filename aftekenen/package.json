@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -12,7 +11,8 @@
     "lint": "expo lint",
     "export:web": "expo export -p web",
     "serve": "npx serve dist",
-    "serve:https": "npx serve dist --ssl-cert ../server.cert --ssl-key ../server.key"
+    "serve:https": "npx serve dist --ssl-cert ../server.cert --ssl-key ../server.key",
+    "export-serve": "yarn export:web && yarn serve:https"
   },
   "jest": {
     "preset": "jest-expo"
