@@ -12,7 +12,7 @@
     "export:web": "expo export -p web",
     "serve": "npx serve dist",
     "serve:https": "npx serve dist --ssl-cert ../server.cert --ssl-key ../server.key",
-    "export-serve": "yarn export:web && yarn serve:https"
+    "export-serve": "npm run export:web && npm run serve:https"
   },
   "jest": {
     "preset": "jest-expo"

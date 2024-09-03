@@ -1,10 +1,12 @@
-import { StyleSheet, View, Text, Alert, Platform, ScrollView, TextInput, Switch } from 'react-native';
+import { StyleSheet, View, Text, Alert, Platform, Modal, TextInput, Switch } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useEffect, useState } from 'react';
 import { Button, Card, Header } from '@rneui/base';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Assignment, Student, database } from '@/types/types';
 import { Ionicons } from '@expo/vector-icons';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 
 type AssignmentFormInputs = {
   studentNumber: string;
@@ -21,7 +23,7 @@ type StudentFormInputs = {
 
 export default function HomeScreen() {
   const [permission, requestPermission] = useCameraPermissions();
-  const [scanned, setScanned] = useState(true);
+  const [scanned, setScanned] = useState(false);
 
   const {
     register: registerAssignment,
@@ -128,6 +130,7 @@ export default function HomeScreen() {
     database.insert('assignments', newAssignment);
     resetAssignment();
     console.log(database);
+    setScanned(false);
   };
 
   const requestPermissions = () => {
@@ -172,27 +175,6 @@ export default function HomeScreen() {
       </View>
     );
   }
-
-  const clearDatabase = () => {
-    database.clear()
-  }
-
-  const exportAssignments = async () => {
-    try {
-      await database.exportToCsv('assignments');
-    } catch (error) {
-      console.error('Error exporting assignments:', error);
-    }
-  }
-
-  const exportStudents = async () => {
-    try {
-      await database.exportToCsv('students');
-    } catch (error) {
-      console.error('Error exporting students:', error);
-    }
-  }
-
   const toggleScan = async () => {
     setScanned(!scanned)
   }
@@ -246,146 +228,83 @@ export default function HomeScreen() {
           justifyContent: 'space-around',
         }}
       />
-      {scanned ?
-        <ScrollView>
-          <View style={styles.container}>
-            <Card>
-              <Card.Title>Assignments</Card.Title>
-              <Card.Divider />
-              <View>
-                <TextInput
-                  placeholder="Student Number"
-                  onChangeText={(text) => setValueAssignment('studentNumber', text)}
-                  style={styles.input}
-                  value={watchAssignment('studentNumber')}
-                />
-                {errorsAssignment.studentNumber && <Text style={styles.errorText}>This field is required</Text>}
+      <Modal
+        transparent
+        visible={scanned}
+      >
+        <View style={styles.container}>
+          <ThemedView style={{ marginHorizontal: 4, padding: 8 }}>
+            <Card.Title><ThemedText>Opdracht</ThemedText></Card.Title>
+            <Card.Divider />
+            <View style={{ margin: 6 }}>
+              <View style={styles.switchContainer}>
+                <ThemedText type='subtitle'>Student number:</ThemedText>
+                <ThemedText type='subtitle'>{watchAssignment('studentNumber')}</ThemedText>
+              </View>
 
-                <TextInput
-                  placeholder="Assignment ID"
-                  onChangeText={(text) => setValueAssignment('assignmentId', text)}
-                  style={styles.input}
-                  value={watchAssignment('assignmentId')}
-                />
-                {errorsAssignment.assignmentId && <Text style={styles.errorText}>This field is required</Text>}
-
-                <View style={styles.switchContainer}>
-                  <Text>Done</Text>
-                  <Switch
-                    onValueChange={(value) => setValueAssignment('done', value)}
-                    value={watchAssignment('done')}
-                  />
-                </View>
-
-                <TextInput
-                  placeholder="Notes"
-                  onChangeText={(text) => setValueAssignment('notes', text)}
-                  style={styles.input}
-                />
-
-                <Button
-                  title=" Scan QR"
-                  onPress={toggleScan}
-                  icon={
-                    <Ionicons name="qr-code-outline" size={18} color="white" />
-                  }
-                  buttonStyle={{ backgroundColor: '#4CAF50' }}
-                  titleStyle={{ fontSize: 16 }}
-                />
-                <Card.Divider />
-                <Button
-                  title="Submit"
-                  onPress={handleSubmitAssignment(onSubmitAssignment)}
-                  titleStyle={{ fontSize: 16 }}
+              <View style={styles.switchContainer}>
+                <ThemedText type='subtitle'>Assignment ID:</ThemedText>
+                <ThemedText type='subtitle'>{watchAssignment('assignmentId')}</ThemedText>
+              </View>
+              <View style={styles.switchContainer}>
+                <ThemedText>Afgerond?</ThemedText>
+                <Switch
+                  onValueChange={(value) => setValueAssignment('done', value)}
+                  value={watchAssignment('done')}
                 />
               </View>
-            </Card>
-            <Card>
-              <Card.Title>Students</Card.Title>
-              <Card.Divider />
-              <TextInput
-                placeholder="Student Number"
-                onChangeText={(text) => setValueStudent('studentNumber', text)}
-                style={styles.input}
-                value={watchStudent('studentNumber')}
-              />
-              {errorsStudent.studentNumber && <Text style={styles.errorText}>This field is required</Text>}
 
               <TextInput
-                placeholder="Student Name"
-                onChangeText={(text) => setValueStudent('studentName', text)}
+                placeholder="Notes"
+                onChangeText={(text) => setValueAssignment('notes', text)}
                 style={styles.input}
-                value={watchStudent('studentName')}
-              />
-              {errorsStudent.studentName && <Text style={styles.errorText}>This field is required</Text>}
-
-              <Button
-                title="Submit"
-                onPress={handleSubmitStudent(onSubmitStudent)}
-                titleStyle={{ fontSize: 16 }} />
-            </Card>
-            <Card>
-              <Button
-                title=" Export Assignments"
-                onPress={exportAssignments}
-                icon={<Ionicons name="document-text-outline" size={18} color="white" />}
-                buttonStyle={{ backgroundColor: '#2196F3', marginBottom: 10 }}
-                titleStyle={{ fontSize: 16 }}
               />
 
               <Card.Divider />
-
-              <Button
-                title=" Export Students"
-                onPress={exportStudents}
-                icon={<Ionicons name="people-outline" size={18} color="white" />}
-                buttonStyle={{ backgroundColor: '#FF9800', marginBottom: 10 }}
-                titleStyle={{ fontSize: 16 }}
-              />
-
-              <Card.Divider />
-              <Card.Divider />
-
-              <Button
-                title=" Clear Database"
-                onPress={clearDatabase}
-                icon={<Ionicons name="trash-outline" size={18} color="white" />}
-                buttonStyle={{ backgroundColor: '#F44336' }}
-                titleStyle={{ fontSize: 16 }}
-              />
-            </Card>
-          </View>
-        </ScrollView>
-        :
-        (
-          Platform.OS === 'web' ? (
-            // Web platform specific view WITH OLD DEPRECATED PROPS BECAUSE OF EXPO INCOMPETENCE
-            <View style={styles.camera}>
-              <CameraView
-                // @ts-ignore - reason: above comment
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                type="back"
-                barCodeScannerSettings={{
-                  barCodeTypes: 'qr',
-                }}
-              />
-              <Button title="Return" onPress={toggleScan} />
+              <View style={styles.buttonContainer}>
+                <Button
+                  title=" New Scan"
+                  onPress={toggleScan}
+                  icon={
+                    <Ionicons name="qr-code-outline" size={24} color="white" />
+                  }
+                  buttonStyle={{ backgroundColor: 'red' }}
+                  titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+                />
+                <Button
+                  title="Submit"
+                  buttonStyle={{ backgroundColor: '#b1d249' }}
+                  onPress={handleSubmitAssignment(onSubmitAssignment)}
+                  titleStyle={{ fontSize: 24, fontWeight: 'bold' }}
+                />
+              </View>
             </View>
-          ) : (
-            // Mobile platform specific view
-            <View style={styles.camera}>
-              <CameraView
-                style={{ flex: 1 }} // Adjust styles as needed
-                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-                barcodeScannerSettings={{
-                  barcodeTypes: ["qr"],
-                }}
-              />
-              <Button title="Return" onPress={toggleScan} />
-            </View>
-          )
+          </ThemedView>
+        </View>
+      </Modal>
+      {
+        Platform.OS === 'web' ? (
+          // Web platform specific view WITH OLD DEPRECATED PROPS BECAUSE OF EXPO INCOMPETENCE
+          <CameraView
+            // @ts-ignore - reason: above comment
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            type="back"
+            barCodeScannerSettings={{
+              barCodeTypes: 'qr',
+            }}
+          />
+        ) : (
+          // Mobile platform specific view
+          <CameraView
+            style={{ flex: 1 }} // Adjust styles as needed
+            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+            barcodeScannerSettings={{
+              barcodeTypes: ["qr"],
+            }}
+          />
         )
       }
+
     </View>
   );
 }
@@ -399,10 +318,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    flex: 1,
+    width: '100%',
     flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
   },
   button: {
     flex: 1,
@@ -412,7 +331,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
   },
   input: {
     height: 40,
@@ -423,11 +341,18 @@ const styles = StyleSheet.create({
   },
   switchContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
   },
   errorText: {
     color: 'red',
     fontSize: 12,
+  },
+  popupContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });

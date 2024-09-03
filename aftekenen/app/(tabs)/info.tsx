@@ -1,9 +1,12 @@
-import { Text, StyleSheet, View, ScrollView, FlatList } from 'react-native';
-import { Button, Card, CheckBox, Header } from '@rneui/base';
+import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
+import { Button, CheckBox, Header } from '@rneui/base';
 import { Assignment, Student, database } from '@/types/types';
 import { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { Card } from '@rneui/themed';
 
 export default function InfoScreen() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -48,21 +51,21 @@ export default function InfoScreen() {
   }
 
   const renderAssignmentItem = ({ item }: { item: Assignment }) => (
-    <View style={styles.item}>
-      <Text style={styles.header}>Assignment ID: {item.assignmentId}</Text>
+    <ThemedView style={styles.item}>
+      <ThemedText style={styles.header}>Assignment ID: {item.assignmentId}</ThemedText>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Ionicons name={item.done ? 'checkmark-circle' : 'close-circle'} size={20} color={item.done ? 'green' : 'red'} style={{ marginRight: 5 }} />
-        <Text style={styles.label}>Done: {item.done ? 'Yes' : 'No'}</Text>
+        <ThemedText style={styles.label}>Done: {item.done ? 'Yes' : 'No'}</ThemedText>
       </View>
-      <Text style={styles.label}>Student: {item.studentNumber}</Text>
-      <Text style={styles.label}>Notes: {item.notes}</Text>
-    </View>
+      <ThemedText style={styles.label}>Student: {item.studentNumber}</ThemedText>
+      <ThemedText style={styles.label}>Notes: {item.notes}</ThemedText>
+    </ThemedView>
   );
 
   const renderStudentItem = ({ item }: { item: Student }) => (
     <View style={styles.item}>
-      <Text style={styles.header}>Student Name: {item.name}</Text>
-      <Text style={styles.label}>Student Number: {item.studentNumber}</Text>
+      <ThemedText style={styles.header}>Student Name: {item.name}</ThemedText>
+      <ThemedText style={styles.label}>Student Number: {item.studentNumber}</ThemedText>
     </View>
   );
 
@@ -78,7 +81,7 @@ export default function InfoScreen() {
         }}
       />
       <ScrollView>
-        <View style={styles.container}>
+        <ThemedView style={styles.container}>
           <Card>
             <Card.Title>Assignments</Card.Title>
             <Card.Divider />
@@ -86,7 +89,7 @@ export default function InfoScreen() {
               scrollEnabled={false}
               data={assignments}
               renderItem={renderAssignmentItem}
-              keyExtractor={(item) => item.assignmentId}
+              keyExtractor={(item) => JSON.stringify(item)}
             />
             <View>
             </View>
@@ -131,7 +134,7 @@ export default function InfoScreen() {
               titleStyle={{ fontSize: 16 }}
             />
           </Card>
-        </View>
+        </ThemedView>
       </ScrollView>
     </View>
   );
